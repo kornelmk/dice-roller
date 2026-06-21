@@ -11,7 +11,7 @@ services:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
-    image: kornelmk/dice-roller-backend:latest
+    build: ./backend
 
     environment:
       APP_VERSION: 1.0.0
@@ -23,7 +23,7 @@ services:
       - "8000:8000"
 
   frontend:
-    image: kornelmk/dice-roller-frontend:latest
+    build: ./frontend
 
     depends_on:
       - backend
