@@ -5,26 +5,44 @@ terraform {
     region         = "us-west-2"
     dynamodb_table = "terraform-lock-dice-roller"
   }
-          
- required_providers {
-	    aws = {
-    	source  = "hashicorp/aws"
-  	version = "5.91.0"
-	     }
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.91.0"
+    }
   }
+
   required_version = "1.11.3"
 }
+
+provider "aws" {
+  region = "us-west-2"
+}
+
+# =========================
+# GLOBAL TAGS
+# =========================
+
+locals {
+  tags = {
+    Project     = "dice-roller"
+    ManagedBy   = "Terraform"
+    Environment = "dev"
+  }
+}
+
+# =========================
+# S3 LOGS BUCKET
+# =========================
 
 # Bucket na logi aplikacji
 resource "aws_s3_bucket" "app_logs" {
   bucket = "dice-roller-app-logs"
-  
-  tags = {
-    Name        = "dice-roller-app-logs"
-    ManagedBy   = "Terraform"
-    Project     = "dice-roller"
-    Environment = "dev"
-  }
+
+  tags = merge(local.tags, {
+    Name = "dice-roller-app-logs"
+  })
 }
 
 # Wersjonowanie logów
