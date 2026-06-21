@@ -5,6 +5,12 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - "backend/**"
+      - "frontend/**"
+      - "database/**"
+      - "docker-compose.yml"
+      - ".github/workflows/ci-cd.yml"
 
 jobs:
   backend-test:
