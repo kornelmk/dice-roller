@@ -29,7 +29,7 @@ chmod +x /usr/local/bin/docker-compose
 mkdir -p /app
 cd /app
 
-git clone https://github.com/name/dice-roller.git .
+git clone https://github.com/kornelmk/dice-roller.git .
 
 # run docker-compose
 cd infra

@@ -11,7 +11,16 @@ services:
       - "5432:5432"
 
     volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dice -d dice"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     image: kornelmk/dice-roller-backend:latest
@@ -20,7 +29,8 @@ services:
       APP_VERSION: 1.0.0
 
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
     ports:
       - "8000:8000"
