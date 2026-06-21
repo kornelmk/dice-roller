@@ -47,3 +47,6 @@ services:
       - "8501:8501"
 
     restart: unless-stopped
+
+volumes:
+  db_data:
