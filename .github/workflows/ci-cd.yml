@@ -17,15 +17,18 @@ jobs:
         working-directory: backend
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
 
+      - name: Check Python syntax
       - run: python -m py_compile app/*.py
 
   frontend-test:
@@ -37,16 +40,19 @@ jobs:
         working-directory: frontend
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - run: python -m py_compile app.py
+      - name: Check Python syntax
+        run: python -m py_compile app.py
 
   docker-build:
 
@@ -57,7 +63,8 @@ jobs:
       - frontend-test
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-
-      - run: docker compose build
+      - name: Build Docker images
+        run: docker compose build
