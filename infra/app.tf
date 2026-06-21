@@ -13,12 +13,11 @@ set -ex
 
 yum update -y
 
-# install docker
-yum install -y docker
+# install docker + git
+yum install -y docker git
+
 systemctl enable docker
 systemctl start docker
-
-usermod -a -G docker ec2-user
 
 # install docker compose
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" \
@@ -27,10 +26,10 @@ curl -L "https://github.com/docker/compose/releases/latest/download/docker-compo
 chmod +x /usr/local/bin/docker-compose
 
 # clone repo
-mkdir -p /home/ec2-user/app
-cd /home/ec2-user/app
+mkdir -p /app
+cd /app
 
-git clone https://github.com/kornelmk/dice-roller.git .
+git clone https://github.com/name/dice-roller.git .
 
 # run docker-compose
 cd infra
