@@ -7,9 +7,7 @@ on:
       - develop
 
 jobs:
-
   backend-test:
-
     runs-on: ubuntu-latest
 
     defaults:
@@ -19,6 +17,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=${{ github.workspace }}/backend" >> $GITHUB_ENV
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,7 +36,6 @@ jobs:
         run: pytest -v
 
   frontend-test:
-
     runs-on: ubuntu-latest
 
     defaults:
