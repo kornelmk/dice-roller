@@ -58,7 +58,6 @@ jobs:
         run: python -m py_compile app.py
 
   docker-build:
-    id: docker-build
     runs-on: ubuntu-latest
     needs:
       - backend-test
