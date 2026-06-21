@@ -3,7 +3,8 @@ Aplikacja symulująca rzucenie kościami do gry
 
 ## Strukutra katalogów
 
-dice-generator/
+```text
+dice-roller/
 │
 ├── database/
 │   └── init.sql
@@ -18,3 +19,4 @@ dice-generator/
 ├── frontend/
     ├── requirements.txt
     └── app.py
+```

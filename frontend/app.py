@@ -3,7 +3,7 @@ import requests
 
 BACKEND_URL = "http://backend:8000"
 
-st.title("🎲 Dice Generator")
+st.title("Dice Roller")
 
 dice_response = requests.get(
     f"{BACKEND_URL}/dice-types"
