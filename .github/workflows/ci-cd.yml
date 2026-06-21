@@ -94,24 +94,24 @@ jobs:
           echo "backend_image=${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:build-${{ github.run_number }}" >> $GITHUB_OUTPUT
           echo "frontend_image=${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:build-${{ github.run_number }}" >> $GITHUB_OUTPUT
           
-docker-push:
-  runs-on: ubuntu-latest
-  needs: docker-build
+  docker-push:
+    runs-on: ubuntu-latest
+    needs: docker-build
 
-  steps:
-    - name: Login to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Push backend image
-      run: |
-        docker push ${{ needs.docker-build.outputs.backend_image }}
+      - name: Push backend image
+        run: |
+          docker push ${{ needs.docker-build.outputs.backend_image }}
 
-    - name: Push frontend image
-      run: |
-        docker push ${{ needs.docker-build.outputs.frontend_image }}
+      - name: Push frontend image
+        run: |
+          docker push ${{ needs.docker-build.outputs.frontend_image }}
 
   smoke-test:
     runs-on: ubuntu-latest
