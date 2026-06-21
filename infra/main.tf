@@ -18,6 +18,13 @@ terraform {
 # Bucket na logi aplikacji
 resource "aws_s3_bucket" "app_logs" {
   bucket = "dice-roller-app-logs"
+  
+  tags = {
+    Name        = "dice-roller-app-logs"
+    ManagedBy   = "Terraform"
+    Project     = "dice-roller"
+    Environment = "dev"
+  }
 }
 
 # Wersjonowanie logów
