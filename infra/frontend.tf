@@ -5,6 +5,8 @@ resource "aws_instance" "frontend" {
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.frontend_sg.id]
 
+  key_name = "dice-roller-key"
+
   user_data = base64encode(<<EOF
 #!/bin/bash
 yum update -y
