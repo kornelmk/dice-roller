@@ -1,5 +1,5 @@
 resource "aws_instance" "backend" {
-  ami           = "ami-0c02fb55956c7d316"
+  ami           = "ami-0d45a4eba03d1e2cf"
   instance_type = "t3.micro"
 
   subnet_id              = aws_subnet.public.id
