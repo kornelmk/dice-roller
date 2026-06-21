@@ -36,6 +36,9 @@ cd infra
 docker-compose pull || true
 docker-compose up -d
 
+# only for manual debug
+usermod -a -G docker ec2-user
+
 EOF
   )
 
