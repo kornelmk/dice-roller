@@ -120,8 +120,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-backend:${{ github.run_number }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:v1.0.${{ github.run_number }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
@@ -129,5 +129,40 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-frontend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-frontend:${{ github.run_number }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:v1.0.${{ github.run_number }}
+
+  tag-release:
+    runs-on: ubuntu-latest
+    needs:
+      - docker-push
+
+    if: github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate version
+        id: version
+        run: |
+          VERSION=v1.0.${{ github.run_number }}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Git tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag ${{ steps.version.outputs.version }}
+          git push origin ${{ steps.version.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Release ${{ steps.version.outputs.version }}
+          generate_release_notes: true
