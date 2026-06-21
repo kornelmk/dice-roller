@@ -6,10 +6,13 @@ Aplikacja symulująca rzucenie kościami do gry
 ```text
 dice-roller/
 │
+├── docker-compose.yml
+|
 ├── database/
 │   └── init.sql
 │
 ├── backend/
+│   ├── Dockerfile
 │   ├── requirements.txt
 │   └── app/
 │       ├── main.py
@@ -17,6 +20,7 @@ dice-roller/
 │       └── models.py
 │
 ├── frontend/
+    ├── Dockerfile
     ├── requirements.txt
     └── app.py
 ```
