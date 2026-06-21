@@ -7,11 +7,14 @@ services:
       POSTGRES_USER: dice
       POSTGRES_PASSWORD: dice
 
+    ports:
+      - "5432:5432"
+
     volumes:
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
-    build: ./backend
+    image: kornelmk/dice-roller-backend:latest
 
     environment:
       APP_VERSION: 1.0.0
@@ -22,11 +25,15 @@ services:
     ports:
       - "8000:8000"
 
+    restart: unless-stopped
+
   frontend:
-    build: ./frontend
+    image: kornelmk/dice-roller-frontend:latest
 
     depends_on:
       - backend
 
     ports:
       - "8501:8501"
+
+    restart: unless-stopped
