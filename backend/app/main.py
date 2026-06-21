@@ -4,7 +4,7 @@ from statistics import median
 import random
 import os
 
-from database import SessionLocal
+from app.database import SessionLocal
 
 app = FastAPI()
 
