@@ -24,3 +24,18 @@ dice-roller/
     ├── requirements.txt
     └── app.py
 ```
+
+## Architektura potoku CI/CD
+
+```text
+1. backend-test
+2. frontend-test
+        ↓
+3. docker-build
+        ↓
+4. docker-push
+        ↓
+5. smoke-test
+        ↓
+6. tag-release
+```

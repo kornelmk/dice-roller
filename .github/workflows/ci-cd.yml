@@ -57,49 +57,15 @@ jobs:
       - name: Check Python syntax
         run: python -m py_compile app.py
 
-  docker-build-and-smoke-test:
+  docker-build:
     runs-on: ubuntu-latest
     needs:
       - backend-test
       - frontend-test
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Build Docker images
-        run: docker compose build
-
-      - name: Start application
-        run: docker compose up -d
-
-      - name: Wait for backend
-        run: |
-          for i in {1..40}; do
-            if curl --fail http://localhost:8000/health; then
-              exit 0
-            fi
-            sleep 3
-          done
-          exit 1
-
-      - name: Test backend health endpoint
-        run: |
-          curl --fail http://localhost:8000/health
-
-      - name: Show container logs on failure
-        if: failure()
-        run: docker compose logs
-
-      - name: Stop containers
-        if: always()
-        run: docker compose down -v
-
-  docker-push:
-    runs-on: ubuntu-latest
-    needs:
-      - backend-test
-      - frontend-test
+    outputs:
+      backend_image: ${{ steps.meta.outputs.backend_image }}
+      frontend_image: ${{ steps.meta.outputs.frontend_image }}
 
     steps:
       - name: Checkout repository
@@ -114,30 +80,60 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push backend image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./backend
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:v1.0.${{ github.run_number }}
+      - name: Build backend image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:build-${{ github.run_number }} ./backend
 
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./frontend
-          push: true
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:v1.0.${{ github.run_number }}
+      - name: Build frontend image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:build-${{ github.run_number }} ./frontend
+
+      - name: Save image names
+        id: meta
+        run: |
+          echo "backend_image=${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-backend:build-${{ github.run_number }}" >> $GITHUB_OUTPUT
+          echo "frontend_image=${{ secrets.DOCKERHUB_USERNAME }}/dice-roller-frontend:build-${{ github.run_number }}" >> $GITHUB_OUTPUT
+          
+docker-push:
+  runs-on: ubuntu-latest
+  needs: docker-build
+
+  steps:
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Push backend image
+      run: |
+        docker push ${{ needs.docker-build.outputs.backend_image }}
+
+    - name: Push frontend image
+      run: |
+        docker push ${{ needs.docker-build.outputs.frontend_image }}
+
+  smoke-test:
+    runs-on: ubuntu-latest
+    needs: docker-push
+
+    steps:
+      - name: Run backend container
+        run: |
+          docker run -d -p 8000:8000 \
+          ${{ needs.docker-build.outputs.backend_image }}
+
+      - name: Wait for backend
+        run: |
+          for i in {1..40}; do
+            curl --fail http://localhost:8000/health && exit 0
+            sleep 2
+          done
+          exit 1
 
   tag-release:
     runs-on: ubuntu-latest
-    needs:
-      - docker-push
-
-    if: github.ref == 'refs/heads/main'
+    needs: smoke-test
 
     permissions:
       contents: write
@@ -157,12 +153,12 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git tag ${{ steps.version.outputs.version }}
-          git push origin ${{ steps.version.outputs.version }}
+          git tag $VERSION
+          git push origin $VERSION
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          name: Release ${{ steps.version.outputs.version }}
+          tag_name: ${{ env.VERSION }}
+          name: Release ${{ env.VERSION }}
           generate_release_notes: true
