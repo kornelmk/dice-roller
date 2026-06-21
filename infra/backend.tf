@@ -10,8 +10,11 @@ resource "aws_instance" "backend" {
   user_data = base64encode(<<EOF
 #!/bin/bash
 yum update -y
-amazon-linux-extras install docker -y
-service docker start
+
+yum install -y docker
+systemctl enable docker
+systemctl start docker
+
 usermod -a -G docker ec2-user
 
 docker run -d \
