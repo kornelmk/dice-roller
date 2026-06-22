@@ -12,6 +12,7 @@ on:
       - "database/**"
       - "docker-compose.yml"
       - ".github/workflows/ci-cd.yml"
+      - ".github/dependabot.yml"
 
 jobs:
   backend-test:
