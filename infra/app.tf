@@ -25,18 +25,10 @@ curl -L "https://github.com/docker/compose/releases/latest/download/docker-compo
 
 chmod +x /usr/local/bin/docker-compose
 
-# clone repo
-mkdir -p /app
-cd /app
+# create app directory only
+mkdir -p /home/ec2-user/app
 
-git clone https://github.com/kornelmk/dice-roller.git .
-
-# run docker-compose
-cd infra
-docker-compose pull || true
-docker-compose up -d
-
-# only for manual debug
+# add permissions
 usermod -a -G docker ec2-user
 
 EOF

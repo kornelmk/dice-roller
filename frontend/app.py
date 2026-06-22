@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import os
 
 BACKEND_URL = "http://backend:8000"
 
@@ -49,3 +50,14 @@ if st.button("Rzuć"):
     with col2:
         st.metric("Maksimum", data["max"])
         st.metric("Mediana", data["median"])
+
+get_app_version():
+    try:
+        response = requests.get(f"{BACKEND_URL}/version", timeout=5)
+        response.raise_for_status()
+        return response.json()["version"]
+    except (requests.RequestException, KeyError):
+        return "niedostępna"
+
+st.divider()
+st.caption(f"Dice Roller | Wersja: {get_app_version()}")

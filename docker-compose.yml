@@ -20,10 +20,10 @@ services:
       retries: 10
 
   backend:
-    image: kornelmk/dice-roller-backend:latest
+    image: kornelmk/dice-roller-backend:${APP_VERSION:-latest}
 
     environment:
-      APP_VERSION: 1.0.0
+      APP_VERSION: ${APP_VERSION:-dev}
 
     depends_on:
       db:
@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: kornelmk/dice-roller-frontend:latest
+    image: kornelmk/dice-roller-frontend:${APP_VERSION:-latest}
 
     depends_on:
       - backend
