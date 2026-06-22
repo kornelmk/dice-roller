@@ -19,6 +19,13 @@ services:
       timeout: 5s
       retries: 10
 
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-2
+        awslogs-group: /dice-roller/app
+        awslogs-stream: database
+
   backend:
     image: kornelmk/dice-roller-backend:${APP_VERSION:-latest}
 
@@ -31,6 +38,13 @@ services:
 
     restart: unless-stopped
 
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-2
+        awslogs-group: /dice-roller/app
+        awslogs-stream: backend
+
   frontend:
     image: kornelmk/dice-roller-frontend:${APP_VERSION:-latest}
 
@@ -38,6 +52,13 @@ services:
       - backend
 
     restart: unless-stopped
+
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-2
+        awslogs-group: /dice-roller/app
+        awslogs-stream: frontend
 
   nginx:
     image: nginx:1.27-alpine
@@ -49,6 +70,13 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped
+
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: us-west-2
+        awslogs-group: /dice-roller/app
+        awslogs-stream: nginx
 
 volumes:
   db_data:

@@ -7,6 +7,8 @@ resource "aws_instance" "app" {
 
   key_name = "dice-roller-key"
 
+  iam_instance_profile = aws_iam_instance_profile.app.name
+
   user_data = base64encode(<<EOF
 #!/bin/bash
 set -ex
