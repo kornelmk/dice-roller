@@ -7,9 +7,6 @@ services:
       POSTGRES_USER: dice
       POSTGRES_PASSWORD: dice
 
-    ports:
-      - "5432:5432"
-
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -32,9 +29,6 @@ services:
       db:
         condition: service_healthy
 
-    ports:
-      - "8000:8000"
-
     restart: unless-stopped
 
   frontend:
@@ -43,9 +37,17 @@ services:
     depends_on:
       - backend
 
-    ports:
-      - "80:8501"
+    restart: unless-stopped
 
+  nginx:
+    image: nginx:1.27-alpine
+    depends_on:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: unless-stopped
 
 volumes:
