@@ -38,3 +38,11 @@ EOF
     Name = "dice-roller-app"
   })
 }
+
+resource "aws_eip" "app" {
+  instance = aws_instance.app.id
+
+  tags = merge(local.tags, {
+    Name = "dice-roller-eip"
+  })
+}
