@@ -154,10 +154,45 @@ jobs:
           docker logs dice-roller-backend
           exit 1
 
-  tag-release:
+  deploy:
     runs-on: ubuntu-latest
     needs:
       - smoke-test
+      - docker-build-and-push
+
+    steps:
+      - name: Deploy to EC2
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
+          VERSION: ${{ needs.docker-build-and-push.outputs.image_tag }}
+        run: |
+          echo "$EC2_KEY" > key.pem
+          chmod 600 key.pem
+
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@$EC2_HOST << EOF
+            set -e
+
+            cd /home/ec2-user/app
+
+            if [ ! -d .git ]; then
+              git clone https://github.com/kornelmk/dice-roller.git .
+            else
+              git pull
+            fi
+
+            echo "APP_VERSION=$VERSION" > .env
+
+            docker compose pull
+            docker compose up -d
+          EOF
+
+          rm -f key.pem
+
+  tag-release:
+    runs-on: ubuntu-latest
+    needs:
+      - deploy
       - docker-build-and-push
 
     permissions:
@@ -182,34 +217,3 @@ jobs:
           tag_name: ${{ needs.docker-build-and-push.outputs.image_tag }}
           name: Release ${{ needs.docker-build-and-push.outputs.image_tag }}
           generate_release_notes: true
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs:
-      - smoke-test
-      - docker-build-and-push
-
-    steps:
-      - name: Deploy to EC2
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_KEY: ${{ secrets.EC2_SSH_KEY }}
-          VERSION: ${{ needs.docker-build-and-push.outputs.image_tag }}
-        run: |
-          echo "$EC2_KEY" > key.pem
-          chmod 600 key.pem
-
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@$EC2_HOST << EOF
-            set -e
-
-            cd /home/ec2-user/app
-
-            git pull
-
-            echo "APP_VERSION=$VERSION" > .env
-
-            docker compose pull
-            docker compose up -d
-          EOF
-
-          rm -f key.pem
