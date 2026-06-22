@@ -183,8 +183,10 @@ jobs:
 
             echo "APP_VERSION=$VERSION" > .env
 
-            docker compose pull
-            docker compose up -d
+            # run docker-compose
+            cd infra
+            docker-compose pull || true
+            docker-compose up -d
           EOF
 
           rm -f key.pem
