@@ -27,6 +27,7 @@ chmod +x /usr/local/bin/docker-compose
 
 # create app directory only
 mkdir -p /home/ec2-user/app
+chown -R ec2-user:ec2-user /home/ec2-user/app
 
 # add permissions
 usermod -a -G docker ec2-user
