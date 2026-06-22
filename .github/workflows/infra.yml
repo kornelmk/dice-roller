@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - main
+      - develop
+      - 'feature/**'
     paths:
       - "infra/**"
       - ".github/workflows/infra.yml"
