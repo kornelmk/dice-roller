@@ -51,7 +51,7 @@ if st.button("Rzuć"):
         st.metric("Maksimum", data["max"])
         st.metric("Mediana", data["median"])
 
-get_app_version():
+def get_app_version():
     try:
         response = requests.get(f"{BACKEND_URL}/version", timeout=5)
         response.raise_for_status()
