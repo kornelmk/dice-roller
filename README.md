@@ -134,9 +134,9 @@ Pipeline CI/CD składa się z etapów:
 - Git tag
 - GitHub Release
 
-## Infrastructure as Code (Terraform)
+## Architektura pipeline Infrastructure as Code (Terraform)
 
-Pipeline Infrastructure as Code (Terraform) konfiguruje następujące elementy chmury AWS:
+Pipeline Infrastructure as Code (Terraform) składa się z jednego kroku i konfiguruje następujące elementy chmury AWS:
 
 - instancje EC2 instance
 - Security Groups
