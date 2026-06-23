@@ -8,12 +8,12 @@ Dice Roller to prosta aplikacja webowa realizująca generowanie losowych rzutów
 
 Dostępne endpointy: 
 
-- GET /api/health – status aplikacji  
-- GET /api/version – wersja aplikacji  
-- GET /api/dice-types – lista dostępnych kostek  
-- POST /api/roll – wykonanie rzutu kostkami  
+- `GET /api/health` – status aplikacji  
+- `GET /api/version` – wersja aplikacji  
+- `GET /api/dice-types` – lista dostępnych kostek  
+- `POST /api/roll` – wykonanie rzutu kostkami  
 
-Przykładowa odpowiedź z endpointu /roll: 
+Przykładowa odpowiedź z endpointu /api/roll: 
 ```
 { 
  "dice": "K6",
@@ -117,7 +117,7 @@ Pipeline CI/CD składa się z etapów:
 
 ### 3. Smoke test
 - uruchomienie backendu lokalnie w CI
-- test endpointu `/health`
+- test endpointu `/api/health`
 
 ### 4. Docker Scout
 - quickview obrazu
