@@ -4,6 +4,27 @@
 
 Dice Roller to prosta aplikacja webowa realizująca generowanie losowych rzutów kostkami oraz obliczanie podstawowych statystyk. Projekt został przygotowany w celu demonstracji pełnego procesu CI/CD, konteneryzacji oraz wdrożenia na AWS z użyciem Terraform. 
 
+## Funkcjonalności aplikacji  
+
+Dostępne endpointy: 
+
+- GET /api/health – status aplikacji  
+- GET /api/version – wersja aplikacji  
+- GET /api/dice-types – lista dostępnych kostek  
+- POST /api/roll – wykonanie rzutu kostkami  
+
+Przykładowa odpowiedź z endpointu /roll: 
+```
+{ 
+ "dice": "K6",
+ "results": [4, 6, 1, 6, 1],
+ "average": 3.2,
+ "min": 1, 
+ "max": 6, 
+ "median": 4 
+}
+```
+
 ## Strukutra katalogów
 
 ```text
