@@ -1,13 +1,15 @@
-resource "aws_instance" "app" {
-  ami           = "ami-0d45a4eba03d1e2cf"
+resource "aws_launch_template" "app" {
+  name_prefix   = "dice-roller-"
+  image_id      = "ami-0d45a4eba03d1e2cf"
   instance_type = "t3.micro"
-
-  subnet_id              = aws_subnet.public.id
-  vpc_security_group_ids = [aws_security_group.app_sg.id]
 
   key_name = "dice-roller-key"
 
-  iam_instance_profile = aws_iam_instance_profile.app.name
+  vpc_security_group_ids = [aws_security_group.app_sg.id]
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.app.name
+  }
 
   user_data = base64encode(<<EOF
 #!/bin/bash
@@ -34,18 +36,19 @@ chown -R ec2-user:ec2-user /home/ec2-user/app
 # add permissions
 usermod -a -G docker ec2-user
 
+git clone https://github.com/kornelmk/dice-roller.git .
+
+cd infra
+docker compose up -d
+
 EOF
   )
 
-  tags = merge(local.tags, {
-    Name = "dice-roller-app"
-  })
-}
+  tag_specifications {
+    resource_type = "instance"
 
-resource "aws_eip" "app" {
-  instance = aws_instance.app.id
-
-  tags = merge(local.tags, {
-    Name = "dice-roller-eip"
-  })
+    tags = merge(local.tags, {
+      Name = "dice-roller-asg-instance"
+    })
+  }
 }
