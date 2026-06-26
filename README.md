@@ -55,10 +55,12 @@ dice-roller/
 ├── ifnra/
 │   ├── app.tf
 │   ├── cloudwatch.tf
+│   ├── github_actions_role.tf
 │   ├── iam.tf
 │   ├── locals.tf
 │   ├── logs.tf
 │   ├── network.tf
+│   ├── oidc.tf
 │   ├── provider.tf
 │   └── security-groups.tf
 │
