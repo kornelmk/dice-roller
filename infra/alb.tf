@@ -10,6 +10,10 @@ resource "aws_lb" "app" {
     aws_subnet.public_b.id
   ]
 
+  enable_deletion_protection = false
+
+  drop_invalid_header_fields = true
+
   tags = merge(local.tags, {
     Name = "dice-roller-alb"
   })
