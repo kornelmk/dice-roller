@@ -26,7 +26,7 @@ jobs:
           terraform_version: 1.11.3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::392789866533:role/dice-roller-github-actions-role
           aws-region: us-west-2
