@@ -5,18 +5,8 @@ permissions:
   contents: read
 
 on:
-  workflow_dispatch:
-    inputs:
-      image_tag:
-        required: true
-        type: string
-  push:
-    branches:
-      - main
-      - develop
-    paths:
-      - "infra/**"
-      - ".github/workflows/infra.yml"
+  repository_dispatch:
+    types: [deploy-infra]
 
 jobs:
   terraform:
@@ -56,4 +46,4 @@ jobs:
 
       - name: Terraform Apply with update variables
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan -var="app_version=${{ github.event.inputs.image_tag }}"
+        run: terraform apply -auto-approve tfplan -var="app_version=${APP_VERSION}"
