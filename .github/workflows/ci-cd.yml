@@ -245,5 +245,5 @@ jobs:
           event-type: deploy-infra
           client-payload: |
             {
-              "image_tag": "${{ steps.meta.outputs.image_tag }}"
+              "image_tag": "${{ needs.docker-build-and-push.outputs.image_tag }}"
             }
