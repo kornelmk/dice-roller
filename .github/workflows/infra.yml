@@ -53,4 +53,4 @@ jobs:
 
       - name: Terraform Apply with update variables
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan -var="app_version=${APP_VERSION}"
+        run: terraform apply -auto-approve tfplan
