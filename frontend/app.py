@@ -59,5 +59,8 @@ def get_app_version():
     except (requests.RequestException, KeyError):
         return "niedostępna"
 
+def get_hostname():
+    return os.getenv("HOSTNAME", "unknown")
+
 st.divider()
-st.caption(f"Dice Roller | Wersja: {get_app_version()}")
+st.caption(f"Dice Roller | Wersja: {get_app_version()} | Host: {get_hostname()}")
