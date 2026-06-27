@@ -40,6 +40,9 @@ usermod -a -G docker ec2-user
 cd /home/ec2-user/app
 git clone https://github.com/kornelmk/dice-roller.git .
 
+# set version
+echo "APP_VERSION=${var.app_version}" > .env
+
 # run app
 cd infra
 docker-compose up -d
