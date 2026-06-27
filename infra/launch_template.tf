@@ -36,10 +36,13 @@ chown -R ec2-user:ec2-user /home/ec2-user/app
 # add permissions
 usermod -a -G docker ec2-user
 
+# clone repo
+cd /home/ec2-user/app
 git clone https://github.com/kornelmk/dice-roller.git .
 
+# run app
 cd infra
-docker compose up -d
+docker-compose up -d
 
 EOF
   )
