@@ -35,6 +35,13 @@ jobs:
         run: |
           echo "APP_VERSION=${{ github.event.client_payload.image_tag }}" >> $GITHUB_ENV
 
+      - name: Fail if version missing
+        run: |
+          if [ -z "$APP_VERSION" ]; then
+            echo "APP_VERSION is empty!"
+            exit 1
+          fi
+
       - name: Terraform Init
         run: terraform init
 
@@ -42,7 +49,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -out=tfplan -var="app_version=${APP_VERSION}"
 
       - name: Terraform Apply with update variables
         if: github.ref == 'refs/heads/main'
