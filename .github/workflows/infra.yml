@@ -41,6 +41,10 @@ jobs:
           role-to-assume: arn:aws:iam::392789866533:role/dice-roller-github-actions-role
           aws-region: us-west-2
 
+      - name: Set image version
+        run: |
+          echo "APP_VERSION=${{ github.event.client_payload.image_tag }}" >> $GITHUB_ENV
+
       - name: Terraform Init
         run: terraform init
 
@@ -52,4 +56,4 @@ jobs:
 
       - name: Terraform Apply with update variables
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan -var="app_version=${{ steps.meta.outputs.image_tag }}"
+        run: terraform apply -auto-approve tfplan -var="app_version=${{ github.event.inputs.image_tag }}"
