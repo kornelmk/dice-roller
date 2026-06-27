@@ -16,8 +16,7 @@ on:
       - "database/**"
       - "infra/**"
       - "docker-compose.yml"
-      - ".github/workflows/ci-cd.yml"
-      - ".github/dependabot.yml"
+      - ".github/**"
 
 jobs:
   backend-test:
