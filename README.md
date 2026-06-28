@@ -52,25 +52,27 @@ dice-roller/
 │       ├── __init__.py
 │       └── test_main.py
 │
-├── ifnra/
-│   ├── app.tf
+├── infra/
+│   ├── alb.tf
+│   ├── autoscaling_group.tf
 │   ├── cloudwatch.tf
 │   ├── github_actions_role.tf
 │   ├── iam.tf
+│   ├── launch_template.tf
+│   ├── listener.tf
 │   ├── locals.tf
 │   ├── logs.tf
 │   ├── network.tf
 │   ├── oidc.tf
 │   ├── provider.tf
-│   └── security-groups.tf
+│   ├── security-groups.tf
+│   ├── target-groups.tf
+│   └── variables.tf
 │
 ├── frontend/
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── app.py
-│
-├── infra/
-│   └── nginx.conf
 │
 └── nginx/
     └── nginx.conf
