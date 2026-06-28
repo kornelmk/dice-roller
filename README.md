@@ -165,8 +165,8 @@ http://localhost/api/
 Działająca wersja demonstracyjna projektu dostępna jest na AWS:
 
 Aplikacja:
-http://34.214.34.127/
+http://dice-roller-alb-861829172.us-west-2.elb.amazonaws.com/
 
 Api aplikacji:
-http://34.214.34.127/api/
+http://dice-roller-alb-861829172.us-west-2.elb.amazonaws.com/api/
 
