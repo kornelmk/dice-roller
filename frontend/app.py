@@ -63,4 +63,4 @@ def get_instance_id():
     return os.getenv("INSTANCE_ID", "unknown")
 
 st.divider()
-st.caption(f"Dice Roller | Wersja: {get_app_version()} | Host: {get_instance_id()}")
+st.caption(f"Dice Roller | Wersja: {get_app_version()} | Host: {get_instance_id()} | Autor: kornelmk")
