@@ -89,8 +89,8 @@ Aplikacja składa się z trzech głównych komponentów:
 
 Środowisko uruchomieniowe obejmuje: 
 
-- Docker i Docker Compose  
-- instancja EC2 na AWS  
+- Docker i Docker Compose
+- Amazon Load Balancer i Auto Scaling Group
 
 ## Architektura pipeline CI/CD
 
@@ -103,9 +103,7 @@ Aplikacja składa się z trzech głównych komponentów:
             ↓
 4. smoke-test
             ↓
-5. deploy
-            ↓
-6. tag-release
+5. tag-release
 ```
 
 Pipeline CI/CD składa się z etapów:
