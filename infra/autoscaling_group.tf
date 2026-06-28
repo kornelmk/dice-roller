@@ -24,7 +24,7 @@ resource "aws_autoscaling_group" "app" {
     strategy = "Rolling"
 
     preferences {
-      min_healthy_percentage = 90
+      min_healthy_percentage = 50
     }
 
     triggers = ["launch_template"]
