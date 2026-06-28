@@ -44,7 +44,8 @@ git clone https://github.com/kornelmk/dice-roller.git .
 echo "APP_VERSION=${var.app_version}" > .env
 
 # set hostname
-HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/local-hostname)
+TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+HOSTNAME=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
 echo "HOSTNAME=$HOSTNAME" >> .env
 
 # run app
