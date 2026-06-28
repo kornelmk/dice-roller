@@ -27,7 +27,7 @@ services:
         awslogs-stream: database
 
   backend:
-    image: kornelmk/dice-roller-backend:${APP_VERSION:-latest}
+    image: kornelmk/dice-roller-backend:${APP_VERSION}
 
     environment:
       APP_VERSION: ${APP_VERSION:-dev}
@@ -46,12 +46,15 @@ services:
         awslogs-stream: backend
 
   frontend:
-    image: kornelmk/dice-roller-frontend:${APP_VERSION:-latest}
+    image: kornelmk/dice-roller-frontend:${APP_VERSION}
 
     depends_on:
       - backend
 
     restart: unless-stopped
+
+    environment:
+      INSTANCE_ID: ${INSTANCE_ID}
 
     logging:
       driver: awslogs
