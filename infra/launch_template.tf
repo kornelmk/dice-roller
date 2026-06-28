@@ -43,6 +43,10 @@ git clone https://github.com/kornelmk/dice-roller.git .
 # set version
 echo "APP_VERSION=${var.app_version}" > .env
 
+# set hostname
+HOSTNAME=$(curl -s http://169.254.169.254/latest/meta-data/local-hostname)
+echo "HOSTNAME=$HOSTNAME" >> .env
+
 # run app
 cd infra
 docker-compose up -d
