@@ -126,24 +126,20 @@ Pipeline CI/CD składa się z etapów:
 - analiza CVE
 - rekomendacje bezpieczeństwa
 
-### 5. Deploy
-- SSH na EC2
-- sklonowanie repozytorium
-- aktualizacja zmiennych środowiskowych z wersją
-- uruchomienie docker compose
-
-### 6. Release
+### 5. Release
 - Git tag
 - GitHub Release
+- wywołanie pipeline `Infrastructure as Code` i przekazanie informacji o numerze wersji
 
 ## Architektura pipeline Infrastructure as Code (Terraform)
 
 Pipeline Infrastructure as Code (Terraform) składa się z jednego kroku i konfiguruje następujące elementy chmury AWS:
 
-- instancje EC2 instance
+- Amazon Load Balancer
+- Auto Scaling Group
+- launch template dla instancji EC2
 - Security Groups
 - IAM Role
-- Elastic IP
 - CloudWatch Log Group oraz alarm
 
 ## Uruchomienie lokalne 
